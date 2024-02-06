@@ -1,0 +1,95 @@
+/* Normal desktop :1200px. */
+@media (min-width: 1200px) and (max-width: 1500px) {
+}
+
+/* Normal desktop :992px. */
+@media (min-width: 992px) and (max-width: 1200px) {
+  .product-categorys ul li {
+    width: 100px;
+    height: 99px;
+  }
+  .checkout-pay-card {
+    margin-bottom: 30px;
+  }
+  .google-pay-budge ul li {
+    width: 13%;
+  }
+}
+
+/* Tablet desktop :768px. */
+@media (min-width: 768px) and (max-width: 991px) {
+  .product-categorys ul li {
+    width: 83px;
+    height: 100px;
+  }
+  .google-pay-budge ul li {
+    width: 18%;
+  }
+}
+
+/* small mobile :320px. */
+@media (max-width: 767px) {
+  .container {
+    width: 100%;
+    margin: auto;
+  }
+  .banner-main-wrap {
+    width: 100%;
+  }
+  .banner-main-wrap h3 {
+    line-height: 1.2em;
+  }
+  .product-categorys {
+    overflow: hidden;
+  }
+  .product-categorys ul li {
+    width: 100px !important;
+    height: 99px;
+    margin: 0 8px;
+  }
+
+  .container {
+    width: 100%;
+    margin: auto;
+  }
+  .product-category-cta h3 {
+    padding-right: 0px;
+  }
+  .schedule input::placeholder {
+    font-size: 12px !important;
+  }
+  .schedule select {
+    top: 37px;
+    left: 58px;
+    font-size: 10px;
+  }
+
+  .schedule button {
+    right: 10px;
+    top: 14px;
+    font-size: 16px;
+  }
+  .checkout-pay-card {
+    width: 100%;
+  }
+  .quantity-items .quantity-text {
+    width: 30%;
+  }
+  .quantity-items .quantity-range {
+    width: 60%;
+  }
+  .header-menu-right {
+    display: none;
+  }
+  .menu-logo-area {
+    width: 200px;
+    margin: auto;
+  }
+}
+
+/* Large Mobile :480px. */
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+  .container {
+    width: 100%;
+  }
+}
