@@ -277,7 +277,9 @@
                     class="col i-pick-option"
                     :class="{ active: form.payment_method == 'card' }"
                     @click="form.payment_method = 'card'"
-                    v-if="settings.settings.payments?.stripe.active"
+                    v-if="
+                      settings.settings.payments?.stripe.active && client_secret
+                    "
                   >
                     <span>{{ $t("Card") }}</span>
                     <span>
@@ -372,7 +374,9 @@
                 <div
                   class="row w-100 ms-0"
                   v-show="form.payment_method == 'card'"
-                  v-if="settings.settings.payments?.stripe.active"
+                  v-if="
+                    settings.settings.payments?.stripe.active && client_secret
+                  "
                 >
                   <div class="col p-0">
                     <PaymentsStripeCard
@@ -384,7 +388,9 @@
                       :client_secret="client_secret"
                     />
                     <span v-if="cardError" role="alert">{{
-                      $t("Please check your card details")
+                      cardError == true
+                        ? cardError
+                        : $t("Please check your card details")
                     }}</span>
                   </div>
                 </div>
@@ -425,7 +431,7 @@
 
           <button
             v-else-if="allowOrder"
-            :disabled="cart.subtotal < settings.getCartMinimum"
+            :disabled="cart.subtotal < settings.getCartMinimum || loading"
             type="submit"
             class="btn btn-primary w-100 fw-bold btn-lg mb-5"
             @click="placeOrder()"
@@ -485,10 +491,16 @@ export default defineNuxtComponent({
         state: "",
         zip: "",
         note: "",
-        payment_method: "cash",
+        payment_method: this.settings.settings.payments?.cod.active
+          ? "cash"
+          : "card",
         transaction_id: "",
-        is_pickup: true,
+        is_pickup: window.localStorage.getItem("_is_pickup") == "true",
         items: [],
+        date: {
+          date: new Date().toISOString().substr(0, 10),
+          time: "",
+        },
       },
     };
   },
@@ -534,8 +546,8 @@ export default defineNuxtComponent({
       this.form.phone = this.auth.user.phone;
 
       if (this.cart.is_pickup) {
-        this.form.street = "Order will be picked up from the restaurant.";
-        this.form.apartment = "Order will be picked up from the restaurant.";
+        this.form.street = "-";
+        this.form.apartment = "-";
         this.isFormValid = true;
       } else {
         this.form.street = this.auth.user?.address?.address || "";
@@ -584,17 +596,13 @@ export default defineNuxtComponent({
     deliveryFee() {
       if (this.cart.is_pickup) {
         return 0;
-      } else {
-        console.log(this.location);
       }
     },
   },
   methods: {
     changedLocation($event) {
-      console.log($event.target.value);
       this.settings.settings.delivery_zones.forEach((loc) => {
         if (loc.id == $event.target.value) {
-          console.log(loc);
           this.activeLocation = loc.id;
           window.localStorage.setItem("_location", loc.handled_by);
           window.localStorage.setItem("_delivery_zone", loc.id);
@@ -604,6 +612,7 @@ export default defineNuxtComponent({
       this.cart.updateCart();
     },
     getClientSecret() {
+      this.loading = true;
       this.cart.updateCart();
       let user_id =
         JSON.parse(window.localStorage.getItem("__user") || "{}").id || "N/A";
@@ -641,6 +650,7 @@ export default defineNuxtComponent({
       token.then((res) => {
         this.customer_id = res.data.customer;
         this.client_secret = res.data.client_secret;
+        this.loading = false;
       });
     },
     placeOrder() {
@@ -658,6 +668,8 @@ export default defineNuxtComponent({
         timeout: 5000,
         icon: true,
       });
+
+      this.loading = true;
 
       let user_id = JSON.parse(
         window.localStorage.getItem("__user") || "{}"
@@ -710,10 +722,12 @@ export default defineNuxtComponent({
 
             window.scrollTo(0, 0);
 
+            this.loading = false;
             this.$router.push("/success");
           })
           .catch((err) => {
             console.log(err);
+            this.loading = false;
           });
       } else {
         this.$toast.error(this.$t("Please fill out the form correctly"), {
@@ -721,6 +735,7 @@ export default defineNuxtComponent({
           timeout: 5000,
           icon: true,
         });
+        this.loading = false;
       }
     },
     updateForm() {
