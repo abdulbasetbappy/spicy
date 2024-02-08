@@ -37,7 +37,7 @@ export default defineNuxtComponent({
 
         var style = {
             base: {
-                color: "#fff",
+                color: "#222fff",
                 fontFamily: '"Poppins", sans-serif',
                 fontSmoothing: "antialiased",
                 fontSize: "14px",
@@ -73,7 +73,7 @@ export default defineNuxtComponent({
                         .then((result) => {
                             if (result.error) {
                                 // Show error to your customer (e.g., insufficient funds)
-                                console.log(result.error.message);
+                                alert(result.error.message);
                             } else {
                                 // The setup has succeeded. Display a success message and send
                                 // result.setupIntent.payment_method to your server to save the
