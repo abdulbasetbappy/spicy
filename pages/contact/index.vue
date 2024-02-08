@@ -122,10 +122,15 @@
           <h3 class="mb-3">{{ $t("Contact Info") }}</h3>
           <p>
             {{ $t("Phone") }}:
-            <a href="tel:+330753816934">+33 07 53 81 69 34</a>
+            <a href="tel:+330681836268">+33 06 81 83 62 68</a> <br />
+            <a style="margin-left: 4.6rem" href="tel:+330297500053"
+              >+33 02 97 50 00 53</a
+            >
             <br />
             {{ $t("Email") }}:
-            <a href="mailto:info@example.com"> info@example.com </a>
+            <a href="mailto:sushinpoke56700@gmail.com">
+              sushinpoke56700@gmail.com
+            </a>
           </p>
 
           <h3 class="mb-3">{{ $t("Feedback") }}</h3>
