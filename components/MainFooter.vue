@@ -15,16 +15,10 @@
       <div class="col-xl-3 p-footer__opening__houres">
         <h3 class="">Heures d'ouverture</h3>
         <p class="">
-          <!-- Vendredi 11:00 - 23:00 <br />
-          Samedi 11:00 - 23:00 <br />
-          Dimanche 11:00 - 23:00 <br />
-          Lundi 11:00 - 23:00 <br />
-          Mardi 11:00 - 23:00 <br />
-          Mercredi 11:00 - 23:00 <br />
-          Jeudi 11:00 - 23:00 -->
-          Mar au Dim <br />
-          <strong>11h30 - 14h30 et 18h00 - 22h00</strong> <br />
-          Fermé le Lundi
+          Lundi jusqu’à Jeudi: <strong>11h-14h30, 18h-22h30</strong> <br />
+          Vendredi <strong>11h-13h30, 18h-22h30</strong> <br />
+          Samedi <strong>11h-14h30, 18h-22h30</strong> <br />
+          Fermé le Dimanche
         </p>
       </div>
       <div class="col-xl-3 p-footer__location">
