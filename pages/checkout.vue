@@ -4,7 +4,6 @@
       <div class="row m-row">
         <div class="col-8 m-col">
           <h1 class="mt-5 mb-4">{{ $t("Checkout") }}</h1>
-
           <Form
             :key="JSON.stringify(schema)"
             ref="form"
@@ -48,6 +47,42 @@
                     <span>{{ $t("Pickup") }}</span>
                     <span>{{ $t("FREE") }}</span>
                   </div>
+                </div>
+              </div>
+              <div class="row w-100 ms-0 mt-3">
+                <div class="col px-0 snp-date-time">
+                  <label for="date">{{ $t("Date") }} </label>
+                  <input
+                    type="date"
+                    id="date"
+                    @change="updateForm()"
+                    v-model="form.date.date"
+                    :min="new Date().toISOString().substr(0, 10)"
+                    :max="
+                      new Date(new Date().setDate(new Date().getDate() + 3))
+                        .toISOString()
+                        .substr(0, 10)
+                    "
+                  />
+                </div>
+                <div class="col px-0 ps-3 snp-date-time">
+                  <label for="time" class="form-label active">{{ $t("Time") }}</label>
+                  <select
+                    id="time"
+                    @change="updateForm()"
+                    v-model="form.date.time"
+                  >
+                    <option selected disabled>
+                      {{ $t("Select a time") }}
+                    </option>
+                    <option
+                      v-for="time in available_times"
+                      :key="time?.value"
+                      :disabled="isActiveTime(time?.value)"
+                    >
+                      {{ time?.range }}
+                    </option>
+                  </select>
                 </div>
               </div>
             </div>
@@ -247,7 +282,7 @@
                     class="col i-pick-option"
                     :class="{ active: form.payment_method == 'cash' }"
                     @click="form.payment_method = 'cash'"
-                    v-if="settings.settings.payments?.cod.active"
+                    v-if="settings.settings?.payments?.cod.active"
                   >
                     <span>{{ $t("Cash") }}</span>
                     <span
@@ -598,8 +633,249 @@ export default defineNuxtComponent({
         return 0;
       }
     },
+    available_times() {
+      let hours = [
+        {
+          range: "00:00 - 00:30",
+          value: "00:00",
+        },
+        {
+          range: "00:30 - 01:00",
+          value: "00:30",
+        },
+        {
+          range: "01:00 - 01:30",
+          value: "01:00",
+        },
+        {
+          range: "01:30 - 02:00",
+          value: "01:30",
+        },
+        {
+          range: "02:00 - 02:30",
+          value: "02:00",
+        },
+        {
+          range: "02:30 - 03:00",
+          value: "02:30",
+        },
+        {
+          range: "03:00 - 03:30",
+          value: "03:00",
+        },
+        {
+          range: "03:30 - 04:00",
+          value: "03:30",
+        },
+        {
+          range: "04:00 - 04:30",
+          value: "04:00",
+        },
+        {
+          range: "04:30 - 05:00",
+          value: "04:30",
+        },
+        {
+          range: "05:00 - 05:30",
+          value: "05:00",
+        },
+        {
+          range: "05:30 - 06:00",
+          value: "05:30",
+        },
+        {
+          range: "06:00 - 06:30",
+          value: "06:00",
+        },
+        {
+          range: "06:30 - 07:00",
+          value: "06:30",
+        },
+        {
+          range: "07:00 - 07:30",
+          value: "07:00",
+        },
+        {
+          range: "07:30 - 08:00",
+          value: "07:30",
+        },
+        {
+          range: "08:00 - 08:30",
+          value: "08:00",
+        },
+        {
+          range: "08:30 - 09:00",
+          value: "08:30",
+        },
+        {
+          range: "09:00 - 09:30",
+          value: "09:00",
+        },
+        {
+          range: "09:30 - 10:00",
+          value: "09:30",
+        },
+        {
+          range: "10:00 - 10:30",
+          value: "10:00",
+        },
+        {
+          range: "10:30 - 11:00",
+          value: "10:30",
+        },
+        {
+          range: "11:00 - 11:30",
+          value: "11:00",
+        },
+        {
+          range: "11:30 - 12:00",
+          value: "11:30",
+        },
+        {
+          range: "12:00 - 12:30",
+          value: "12:00",
+        },
+        {
+          range: "12:30 - 13:00",
+          value: "12:30",
+        },
+        {
+          range: "13:00 - 13:30",
+          value: "13:00",
+        },
+        {
+          range: "13:30 - 14:00",
+          value: "13:30",
+        },
+        {
+          range: "14:00 - 14:30",
+          value: "14:00",
+        },
+        {
+          range: "14:30 - 15:00",
+          value: "14:30",
+        },
+        {
+          range: "15:00 - 15:30",
+          value: "15:00",
+        },
+        {
+          range: "15:30 - 16:00",
+          value: "15:30",
+        },
+        {
+          range: "16:00 - 16:30",
+          value: "16:00",
+        },
+        {
+          range: "16:30 - 17:00",
+          value: "16:30",
+        },
+        {
+          range: "17:00 - 17:30",
+          value: "17:00",
+        },
+        {
+          range: "17:30 - 18:00",
+          value: "17:30",
+        },
+        {
+          range: "18:00 - 18:30",
+          value: "18:00",
+        },
+        {
+          range: "18:30 - 19:00",
+          value: "18:30",
+        },
+        {
+          range: "19:00 - 19:30",
+          value: "19:00",
+        },
+        {
+          range: "19:30 - 20:00",
+          value: "19:30",
+        },
+        {
+          range: "20:00 - 20:30",
+          value: "20:00",
+        },
+        {
+          range: "20:30 - 21:00",
+          value: "20:30",
+        },
+        {
+          range: "21:00 - 21:30",
+          value: "21:00",
+        },
+        {
+          range: "21:30 - 22:00",
+          value: "21:30",
+        },
+        {
+          range: "22:00 - 22:30",
+          value: "22:00",
+        },
+        {
+          range: "22:30 - 23:00",
+          value: "22:30",
+        },
+        {
+          range: "23:00 - 23:30",
+          value: "23:00",
+        },
+        {
+          range: "23:30 - 00:00",
+          value: "23:30",
+        },
+      ];
+
+      // Lun-Jeu : 18H - 23H | Ven - Dem : 18H - 00H
+      // if today is Lun-Jeu and time is 18H - 23H, return hours
+      // if today is Ven - Dim and time is 18H - 00H,
+      let date = new Date(this.form.date.date);
+      let day = date.getDay();
+
+      if (day >= 1 && day <= 4) {
+        hours = hours.filter((h) => {
+          let time = parseInt(h.value.split(":")[0]);
+          return time >= 18 && time < 23;
+        });
+      } else {
+        hours = hours.filter((h) => {
+          let time = parseInt(h.value.split(":")[0]);
+          return time >= 18 && time < 24;
+        });
+      }
+      
+      return hours;
+    },
   },
   methods: {
+    isActiveTime(time) {
+      console.log(time)
+      let selected_date = new Date(this.form.date.date);
+      let current_date = new Date();
+
+      // if selected date is is future, return true
+      if (selected_date > current_date) {
+        return false;
+      } else {
+        // if selected date is today, check if time is in the past
+        let selected_time = new Date(
+          selected_date.getFullYear(),
+          selected_date.getMonth(),
+          selected_date.getDate(),
+          time.split(":")[0],
+          time.split(":")[1]
+        );
+
+        if (selected_time > current_date) {
+          return false;
+        } else {
+          return true;
+        }
+      }
+    },
     changedLocation($event) {
       this.settings.settings.delivery_zones.forEach((loc) => {
         if (loc.id == $event.target.value) {
@@ -648,8 +924,8 @@ export default defineNuxtComponent({
       const token = this.cart.getClientSecret(data);
 
       token.then((res) => {
-        this.customer_id = res.data.customer;
-        this.client_secret = res.data.client_secret;
+        this.customer_id = res?.data?.customer;
+        this.client_secret = res?.data?.client_secret;
         this.loading = false;
       });
     },
@@ -957,6 +1233,22 @@ export default defineNuxtComponent({
     flex-direction: column;
     .m-col {
       width: 100%;
+    }
+  }
+}
+
+.snp-date-time {
+  input,
+  select {
+    color:white !important;
+  }
+  select{
+    box-sizing:border-box;
+    width:100%;
+    height: 48px;
+    border-radius:5px;
+    &:focus{
+      outline:1px solid white;
     }
   }
 }
