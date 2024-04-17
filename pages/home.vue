@@ -52,6 +52,14 @@
           </div>
           <button class="button">See Menu</button>
         </div>
+        <!--Sidebar Opener-->
+        <div class="container__content__header__sidebar">
+          <div class="container__content__header__sidebar__bars">
+            <div class="first"></div>
+            <div class="second"></div>
+            <div class="third"></div>
+          </div>
+        </div>
       </header>
       <!--Hero Section-->
       <section class="container__content__hero">
@@ -78,10 +86,13 @@
         </div>
       </section>
     </div>
-    <!--Hero Details-->
-    <div class="container__heroDetails">
-      <div class="container__heroDetails__content">
-        <div class="container__heroDetails__content__cards">
+  </div>
+
+  <!--Hero Details-->
+  <div class="cardDetails">
+    <div class="cardDetails__details">
+      <div class="cardDetails__details__content">
+        <div class="cardDetails__details__content__cards">
           <div class="card">
             <div class="icon">
               <svg
@@ -784,7 +795,6 @@
   </section>
 
   <!--Location-->
-
   <iframe
     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7306.003959679029!2d90.42890128899637!3d23.71162333794356!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b9cc7d566d03%3A0x2472a49ac0504cd2!2sJatra%20Bari%2C%20Dhaka!5e0!3m2!1sen!2sbd!4v1713084128234!5m2!1sen!2sbd"
     width="100%"
@@ -896,6 +906,11 @@
     background-color: var(--primary-color);
     color: var(--secondary-color);
   }
+  @media screen and (max-width: 768px) {
+    width: 100px;
+    height: 30px;
+    font-size: 14px;
+  }
 }
 .card {
   border-bottom: 4px solid var(--primary-color);
@@ -904,16 +919,37 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+
   gap: 20px;
   padding: 40px 20px;
   background-color: var(--secondary-color);
+  @media screen and (max-width: 768px) {
+    padding: 20px 10px;
+    gap: 12px;
+  }
+  .icon {
+    svg {
+      width: 40px;
+      height: 40px;
+    }
+  }
   h3 {
     font-size: var(--font-paragraph-lg);
     line-height: 20px;
+    text-align: center;
+    @media screen and (max-width: 768px) {
+      font-size: var(--font-paragraph);
+      line-height: 12px;
+    }
   }
   p {
     font-size: var(--font-paragraph);
     line-height: 27px;
+    text-align: center;
+    @media screen and (max-width: 768px) {
+      font-size: 14px;
+      line-height: 18px;
+    }
   }
 }
 
@@ -924,18 +960,41 @@
   background-image: url("~/assets/background.png");
   background-size: cover;
   background-position: center;
+  padding: 10px;
+  @media screen and (max-width: 768px) {
+    height: 700px;
+  }
   &__content {
     max-width: 1200px;
-    height: 800px;
+    height: 100%;
     margin: auto;
+    @media screen and (max-width: 768px) {
+      max-width: 768px;
+      height: fit-content;
+    }
     &__header {
       height: 100px;
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       align-items: center;
+      @media screen and (max-width: 768px) {
+        grid-template-columns: 1fr 1fr;
+        height: 60px;
+      }
       &__logo {
+        img {
+          width: 150px;
+          height: 60px;
+          @media screen and (max-width: 768px) {
+            width: 50%;
+            height: 50%;
+          }
+        }
       }
       &__nav {
+        @media screen and (max-width: 768px) {
+          display: none;
+        }
         ul {
           display: flex;
           justify-content: space-around;
@@ -958,7 +1017,12 @@
         align-items: center;
         flex-direction: row;
         gap: 30px;
+        @media screen and (max-width: 768px) {
+          display: none;
+        }
         &__cart {
+          height: fit-content;
+          width: fit-content;
           display: flex;
           align-items: center;
           position: relative;
@@ -979,6 +1043,25 @@
           }
         }
       }
+      &__sidebar {
+        display: none;
+        @media screen and (max-width: 768px) {
+          display: flex;
+          justify-content: flex-end;
+        }
+        &__bars {
+          width: 35px;
+          .first,
+          .second,
+          .third {
+            background-color: var(--secondary-color);
+            width: 100%;
+            height: 5px;
+            margin: 6px 0px;
+            border-radius: 8px;
+          }
+        }
+      }
     }
     &__hero {
       display: flex;
@@ -986,15 +1069,26 @@
       height: calc(800px - 200px);
       justify-content: flex-start;
       align-items: center;
+      @media screen and (max-width: 768px) {
+        padding-top: 30px;
+        height: fit-content;
+        flex-direction: column-reverse;
+      }
       &__left {
         color: var(--secondary-color);
         width: 60%;
+        @media screen and (max-width: 768px) {
+          width: 100%;
+          padding: 30px 0px;
+        }
         h1 {
           font-size: 100px;
           font-weight: 900;
-          line-height: 100px;
           animation: text-shadow-drop-center 0.9s ease-in-out 0ms infinite
             alternate forwards;
+          @media screen and (max-width: 768px) {
+            font-size: 46px;
+          }
           @keyframes text-shadow-drop-center {
             0% {
               text-shadow: 0px 2px 0px #ed1d25;
@@ -1007,21 +1101,35 @@
         h2 {
           font-size: 40px;
           font-weight: 900;
-          line-height: 56px;
           margin: 20px 0px;
+          @media screen and (max-width: 768px) {
+            font-size: 20px;
+            margin: 8px 0px;
+          }
         }
         p {
           font-size: var(--font-paragraph);
           font-weight: 400;
-          line-height: 27px;
           margin: 20px 100px 20px 0px;
+          @media screen and (max-width: 768px) {
+            font-size: 16px;
+            margin: 6px 40px 20px 0px;
+          }
         }
       }
       &__right {
         width: 40%;
         justify-self: flex-end;
         position: relative;
+        @media screen and (max-width: 768px) {
+          width: 100%;
+        }
         &__img {
+          @media screen and (max-width: 768px) {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
           img {
             width: 100%;
             height: 100%;
@@ -1031,9 +1139,12 @@
             background-size: cover;
             background-image: url("~/assets/hero.png");
             object-fit: contain;
-
             -webkit-box-reflect: below 3px -webkit-gradient(linear, left top, left
                   bottom, from(transparent), color-stop(50%, transparent), to(rgba(250, 250, 250, 0.5)));
+            @media screen and (max-width: 768px) {
+              width: 70%;
+              height: 70%;
+            }
           }
         }
         &__discount {
@@ -1057,43 +1168,66 @@
             font-size: var(--font-paragraph);
             font-weight: 500;
           }
+          @media screen and (max-width: 768px) {
+            top: 20px;
+            left: 20px;
+            height: 80px;
+            width: 80px;
+            border: 2px dashed var(--secondary-color);
+            outline: 5px solid var(--primary-color);
+            span {
+              font-size: 14px;
+            }
+          }
         }
       }
     }
   }
-  &__heroDetails {
-    width: 100%;
-    height: fit-content;
-    background-color: var(--secondary-color);
+}
+//Card Details
+.cardDetails {
+  width: 100%;
+  height: 200px;
+  @media screen and (max-width: 768px) {
+    height: 60px;
+  }
+  &__details {
+    max-width: 1200px;
     margin: auto;
+    position: relative;
     &__content {
-      max-width: 1200px;
-      height: 220px;
-      margin: auto;
-      position: relative;
+      position: absolute;
+      top: -90px;
       &__cards {
-        width: 100%;
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 30px;
-        position: absolute;
-        top: -40%;
-        left: 0;
+        @media screen and (max-width: 768px) {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 10px;
+          padding: 10px;
+        }
       }
     }
   }
 }
+
 //Special Menu Section
 .main {
   width: 100%;
   height: fit-content;
   background-color: var(--primary-bg);
-  margin-top: 200px;
-  padding: 50px 0px;
+  padding: 50px 10px;
+  @media screen and (max-width: 768px) {
+    margin-top: 250px;
+  }
   &__content {
     max-width: 1200px;
     height: fit-content;
     margin: auto;
+    @media screen and (max-width: 768px) {
+      max-width: 768px;
+    }
     &__header {
       text-align: center;
       p {
@@ -1109,6 +1243,11 @@
         font-weight: var(--font-heading-width);
         color: var(--solid-dark);
         text-shadow: 0px 4px 0px #ed1d25;
+        @media screen and (max-width: 768px) {
+          font-size: 48px;
+          line-height: 50px;
+          padding-bottom: 25px;
+        }
       }
     }
     &__cards {
@@ -1116,6 +1255,11 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 30px;
       padding: 50px;
+      @media screen and (max-width: 768px) {
+        grid-template-columns: repeat(1, 1fr);
+        gap: 20px;
+        padding: 30px;
+      }
       &__card {
         background-color: var(--secondary-color);
         border-radius: 8px;
@@ -1124,10 +1268,16 @@
           width: 100%;
           height: 260px;
           border-radius: 8px 8px 0px 0px;
+          @media screen and (max-width: 768px) {
+            height: 230px;
+          }
         }
 
         &__info {
           padding: 10px 20px;
+          @media screen and (max-width: 768px) {
+            padding: 5px 12px;
+          }
           &__first {
             display: flex;
             justify-content: space-between;
@@ -1137,6 +1287,9 @@
               font-size: var(--font-paragraph-lg);
               font-weight: 700;
               color: var(--text-color);
+              @media screen and (max-width: 768px) {
+                font-size: var(--font-paragraph);
+              }
             }
             &__btn {
               color: var(--secondary-color);
@@ -1144,6 +1297,10 @@
               width: 149px;
               height: 44px;
               border-radius: 5px;
+              @media screen and (max-width: 768px) {
+                width: 100px;
+                height: 30px;
+              }
             }
           }
           &__second {
@@ -1156,12 +1313,23 @@
               color: var(--primary-color);
               font-weight: 700;
             }
+            @media screen and (max-width: 768px) {
+              svg {
+                width: 20px;
+                height: 20px;
+                fill: #ffc107;
+              }
+              p {
+                font-size: 16px;
+              }
+            }
           }
         }
       }
     }
   }
 }
+
 //Banner Section
 .banner {
   width: 100%;
@@ -1172,31 +1340,55 @@
   object-fit: contain;
   /* flip background vertically */
   transform: scaleX(-1);
+  @media screen and (max-width: 768px) {
+    background-position: left;
+  }
   &__container {
     width: 1200px;
     height: 100%;
     margin: auto;
     /* flip background vertically */
     transform: scaleX(-1);
+    @media screen and (max-width: 768px) {
+      width: 100%;
+    }
     &__content {
       width: 100%;
       height: 100%;
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
       justify-content: flex-start;
       align-items: center;
+      padding: 15px;
+      @media screen and (max-width: 768px) {
+      }
       &__left {
+        grid-column: 1/7;
         color: var(--secondary-color);
-        width: 50%;
+        @media screen and (max-width: 768px) {
+          grid-column: 1/13;
+          width: 100%;
+          background-color: #04040ca4;
+          padding: 60px 20px;
+          border-radius: 8px;
+        }
         h2 {
           font-size: 50px;
           font-weight: 900;
           line-height: 70px;
+          @media screen and (max-width: 768px) {
+            font-size: 30px;
+            line-height: 40px;
+          }
         }
         p {
           font-size: var(--font-paragraph);
           font-weight: 400;
           line-height: 27px;
           margin: 20px 100px 20px 0px;
+          @media screen and (max-width: 768px) {
+            margin: 20px 20px 20px 0px;
+          }
         }
         &__btn {
           color: var(--secondary-color);
@@ -1211,16 +1403,23 @@
     }
   }
 }
+
 //delicious menu
 .delicious {
   width: 100%;
   height: fit-content;
   background-color: var(--primary-bg);
   padding: 50px 0px;
+  @media screen and (max-width: 768px) {
+    padding: 50px 10px;
+  }
   &__container {
     max-width: 1200px;
     height: fit-content;
     margin: auto;
+    @media screen and (max-width: 768px) {
+      max-width: 768px;
+    }
     &__header {
       text-align: center;
       p {
@@ -1236,6 +1435,11 @@
         font-weight: var(--font-heading-width);
         color: var(--solid-dark);
         text-shadow: 0px 4px 0px #ed1d25;
+        @media screen and (max-width: 768px) {
+          font-size: 40px;
+          line-height: 40px;
+          padding-bottom: 45px;
+        }
       }
     }
     &__cards {
@@ -1243,6 +1447,10 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 30px;
       padding: 50px;
+      @media screen and (max-width: 768px) {
+        grid-template-columns: repeat(1, 1fr);
+        padding: 0px;
+      }
       &__card {
         background-color: var(--primary-bg);
         border-radius: 8px;
@@ -1255,9 +1463,13 @@
           justify-content: flex-start;
           align-items: center;
           img {
-            width: 220px;
-            height: 210px;
+            width: 250px;
+            height: 230px;
             border-radius: 8px;
+            @media screen and (max-width: 768px) {
+              width: 150px;
+              height: 130px;
+            }
           }
         }
         &__info {
@@ -1268,33 +1480,59 @@
           border-radius: 0px 8px 8px 0px;
           background-color: var(--secondary-color);
           box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+          display: flex;
+          justify-content: space-between;
+          flex-direction: column;
+          @media screen and (max-width: 768px) {
+            padding: 8px 12px;
+            height: 90%;
+          }
           &__title {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin: 8px 0px;
+            flex-direction: row;
+            margin: 4px 0px;
+            @media screen and (max-width: 768px) {
+              margin: 0px 0px;
+            }
             h3 {
               font-size: var(--font-paragraph-lg);
               font-weight: 700;
               color: var(--text-color);
+              @media screen and (max-width: 768px) {
+                font-size: 14px;
+              }
             }
             p {
+              text-align: end;
               font-size: var(--font-paragraph);
               color: var(--primary-color);
               font-weight: 700;
+              @media screen and (max-width: 768px) {
+                font-size: 14px;
+              }
             }
           }
           &__description {
             margin: 8px 0px;
+            @media screen and (max-width: 768px) {
+              margin: 4px 0px;
+            }
             p {
               font-size: var(--font-paragraph);
               color: var(--text-color);
               font-weight: 400;
+              @media screen and (max-width: 768px) {
+                font-size: 12px;
+              }
             }
           }
           &__button {
             text-align: end;
-            margin: 8px 0px;
+            margin: 4px 0px;
+            @media screen and (max-width: 768px) {
+              margin: 0px 0px;
+            }
             button {
               color: var(--secondary-color);
               background-color: var(--primary-color);
@@ -1302,11 +1540,26 @@
               height: 44px;
               border-radius: 5px;
               border: none;
+              @media screen and (max-width: 768px) {
+                font-size: 12px;
+                width: 90px;
+                height: 25px;
+              }
             }
           }
         }
       }
     }
+  }
+}
+
+//Location
+iframe {
+  width: 100%;
+  height: 450px;
+  border: none;
+  @media screen and (max-width: 768px) {
+    height: 300px;
   }
 }
 
@@ -1323,21 +1576,46 @@
     max-width: 1200px;
     height: fit-content;
     margin: auto;
+    @media screen and (max-width: 768px) {
+      max-width: 768px;
+    }
     &__content {
       display: grid;
       grid-template-columns: repeat(12, 1fr);
       gap: 30px;
       padding: 50px 0px;
+      @media screen and (max-width: 768px) {
+        padding: 20px 0px 10px 0px;
+        gap: 10px;
+        grid-auto-flow: column;
+      }
       &__details {
         grid-column: 1/5;
+        @media screen and (max-width: 768px) {
+          grid-column: 1/13;
+          padding: 10px;
+        }
+        img {
+          @media screen and (max-width: 768px) {
+            width: 120px;
+            height: 50px;
+          }
+        }
         p {
           font-size: var(--font-paragraph);
           font-weight: 400;
           line-height: 27px;
+          @media screen and (max-width: 768px) {
+            font-size: 14px;
+          }
         }
       }
       &__links {
         grid-column: 5/7;
+        @media screen and (max-width: 768px) {
+          grid-column: 1/7;
+          padding: 10px;
+        }
         h3 {
           font-size: 28px;
           font-weight: 700;
@@ -1345,10 +1623,17 @@
           letter-spacing: 5px;
           color: var(--primary-color);
           font-family: var(--font-family);
+          @media screen and (max-width: 768px) {
+            font-size: 20px;
+            line-height: 25px;
+          }
         }
         ul {
           li {
             margin: 10px 0px;
+            @media screen and (max-width: 768px) {
+              margin: 5px 0px;
+            }
             a {
               text-decoration: none;
               font-size: var(--font-paragraph);
@@ -1359,12 +1644,20 @@
               &:hover {
                 color: var(--primary-color);
               }
+              @media screen and (max-width: 768px) {
+                font-size: 14px;
+                line-height: 15px;
+              }
             }
           }
         }
       }
       &__opening {
         grid-column: 7/10;
+        @media screen and (max-width: 768px) {
+          grid-column: 1/13;
+          padding: 10px;
+        }
         h3 {
           font-size: 28px;
           font-weight: 700;
@@ -1372,16 +1665,29 @@
           letter-spacing: 5px;
           color: var(--primary-color);
           font-family: var(--font-family);
+          @media screen and (max-width: 768px) {
+            font-size: 20px;
+            line-height: 25px;
+          }
         }
         p {
           font-size: var(--font-paragraph);
           font-weight: 400;
           line-height: 27px;
           margin: 10px 0px;
+          @media screen and (max-width: 768px) {
+            font-size: 14px;
+            line-height: 15px;
+          }
         }
       }
       &__address {
         grid-column: 10/13;
+        @media screen and (max-width: 768px) {
+          grid-column: 7/13;
+          padding: 10px;
+          padding-bottom: 0px;
+        }
         h3 {
           font-size: 28px;
           font-weight: 700;
@@ -1389,12 +1695,20 @@
           letter-spacing: 5px;
           color: var(--primary-color);
           font-family: var(--font-family);
+          @media screen and (max-width: 768px) {
+            font-size: 20px;
+            line-height: 25px;
+          }
         }
         p {
           font-size: var(--font-paragraph);
           font-weight: 400;
           line-height: 27px;
           margin: 10px 0px;
+          @media screen and (max-width: 768px) {
+            font-size: 14px;
+            line-height: 15px;
+          }
           span {
             color: var(--primary-color);
             font-weight: 700;
@@ -1407,18 +1721,29 @@
     width: 100%;
     height: 50px;
     background-color: var(--solid-dark);
+    @media screen and (max-width: 768px) {
+      height: 30px;
+    }
     &__container {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      width: 1200px;
+      max-width: 1200px;
       height: 50px;
       margin: auto;
       color: var(--secondary-color);
+      @media screen and (max-width: 768px) {
+        max-width: 768px;
+        height: 30px;
+      }
       p {
         font-size: var(--font-paragraph);
         font-weight: 400;
         line-height: 27px;
+        @media screen and (max-width: 768px) {
+          font-size: 8px;
+          line-height: 8px;
+        }
         span {
           color: var(--primary-color);
           font-weight: 700;
