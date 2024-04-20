@@ -54,12 +54,25 @@
         </div>
         <!--Sidebar Opener-->
         <div class="container__content__header__sidebar">
-          <div class="container__content__header__sidebar__bars">
+          <div @click='' class="container__content__header__sidebar__bars">
             <div class="first"></div>
             <div class="second"></div>
             <div class="third"></div>
           </div>
         </div>
+        <!--Sidebar
+        <div class="container__content__header__sidebarToggle" :class="{ 'sidebar-active': sideBarActive }">
+          <nav class="container__content__header__sidebarToggle__sidebar__nav">
+            <ul>
+              <li><nuxt-link to="#">Home</nuxt-link></li>
+              <li><nuxt-link to="#AboutUs">About Us</nuxt-link></li>
+              <li><nuxt-link to="#Menu">Menu</nuxt-link></li>
+              <li><nuxt-link to="#ContactUs">Contact Us</nuxt-link></li>
+            </ul>
+          </nav>
+        </div>
+        <!--Overlay
+        <div class="sidebar-overlay" @click="sideBarToggle"></div>-->
       </header>
       <!--Hero Section-->
       <section class="container__content__hero">
@@ -78,10 +91,10 @@
         <div class="container__content__hero__right">
           <div class="container__content__hero__right__img">
             <img src="~/assets/hero.png" alt="" />
-          </div>
-          <div class="container__content__hero__right__discount">
-            30% <br />
-            <span>Discount</span>
+            <div class="container__content__hero__right__img__discount">
+              30% <br />
+              <span>Discount</span>
+            </div>
           </div>
         </div>
       </section>
@@ -863,7 +876,11 @@
   </footer>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+/*
+const sideBarActive = ref(false);
+const sideBarToggle = () => (sideBarActive.value = !sideBarActive.value);*/
+</script>
 
 <style lang="scss">
 //Google Fonts  -  Roboto Slab
@@ -919,7 +936,6 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-
   gap: 20px;
   padding: 40px 20px;
   background-color: var(--secondary-color);
@@ -961,9 +977,6 @@
   background-size: cover;
   background-position: center;
   padding: 10px;
-  @media screen and (max-width: 768px) {
-    height: 700px;
-  }
   &__content {
     max-width: 1200px;
     height: 100%;
@@ -1050,6 +1063,7 @@
           justify-content: flex-end;
         }
         &__bars {
+          cursor: pointer;
           width: 35px;
           .first,
           .second,
@@ -1062,6 +1076,7 @@
           }
         }
       }
+ 
     }
     &__hero {
       display: flex;
@@ -1125,6 +1140,10 @@
           width: 100%;
         }
         &__img {
+          width: fit-content;
+          height: 320px;
+          margin: auto;
+          position: relative;
           @media screen and (max-width: 768px) {
             display: flex;
             justify-content: center;
@@ -1137,46 +1156,44 @@
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
-            background-image: url("~/assets/hero.png");
             object-fit: contain;
             -webkit-box-reflect: below 3px -webkit-gradient(linear, left top, left
                   bottom, from(transparent), color-stop(50%, transparent), to(rgba(250, 250, 250, 0.5)));
             @media screen and (max-width: 768px) {
-              width: 70%;
-              height: 70%;
+              width: 100%;
+              height: 320px;
             }
           }
-        }
-        &__discount {
-          position: absolute;
-          top: 0;
-          left: 0;
-          background-color: var(--primary-color);
-          color: var(--secondary-color);
-          height: 120px;
-          width: 120px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border-radius: 50%;
-          font-size: var(--font-paragraph-lg);
-          font-weight: 800;
-          border: 4px dashed var(--secondary-color);
-          outline: 10px solid var(--primary-color);
-          flex-direction: column;
-          span {
-            font-size: var(--font-paragraph);
-            font-weight: 500;
-          }
-          @media screen and (max-width: 768px) {
-            top: 20px;
-            left: 20px;
-            height: 80px;
-            width: 80px;
-            border: 2px dashed var(--secondary-color);
-            outline: 5px solid var(--primary-color);
+          &__discount {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            height: 120px;
+            width: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            font-size: var(--font-paragraph-lg);
+            font-weight: 800;
+            border: 4px dashed var(--secondary-color);
+            outline: 10px solid var(--primary-color);
+            flex-direction: column;
             span {
-              font-size: 14px;
+              font-size: var(--font-paragraph);
+              font-weight: 500;
+            }
+            @media screen and (max-width: 768px) {
+              top: 20px;
+              height: 90px;
+              width: 90px;
+              border: 2px dashed var(--secondary-color);
+              outline: 5px solid var(--primary-color);
+              span {
+                font-size: 14px;
+              }
             }
           }
         }
@@ -1184,28 +1201,38 @@
     }
   }
 }
+
 //Card Details
 .cardDetails {
-  width: 100%;
-  height: 200px;
+  max-width: 1200px;
+  height: 220px;
+  margin: auto;
+  position: relative;
   @media screen and (max-width: 768px) {
-    height: 60px;
+    max-width: 768px;
+    padding: 10px;
   }
   &__details {
-    max-width: 1200px;
-    margin: auto;
     position: relative;
     &__content {
       position: absolute;
       top: -90px;
+      @media screen and (max-width: 768px) {
+        top: 50%; /* Move the element 50% from the top of its parent */
+        left: 50%; /* Move the element 50% from the left of its parent */
+        transform: translate(
+          -50%,
+          -25%
+        ); /* Center the element both vertically and horizontally */
+        width: 100%;
+      }
       &__cards {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 30px;
+        gap: 20px;
         @media screen and (max-width: 768px) {
           grid-template-columns: repeat(2, 1fr);
           gap: 10px;
-          padding: 10px;
         }
       }
     }
@@ -1219,7 +1246,7 @@
   background-color: var(--primary-bg);
   padding: 50px 10px;
   @media screen and (max-width: 768px) {
-    margin-top: 250px;
+    margin-top: 50px;
   }
   &__content {
     max-width: 1200px;
@@ -1269,7 +1296,7 @@
           height: 260px;
           border-radius: 8px 8px 0px 0px;
           @media screen and (max-width: 768px) {
-            height: 230px;
+            height: 70%;
           }
         }
 
@@ -1449,6 +1476,7 @@
       padding: 50px;
       @media screen and (max-width: 768px) {
         grid-template-columns: repeat(1, 1fr);
+        justify-items: center;
         padding: 0px;
       }
       &__card {
@@ -1486,6 +1514,7 @@
           @media screen and (max-width: 768px) {
             padding: 8px 12px;
             height: 90%;
+            max-width: 250px;
           }
           &__title {
             display: flex;
