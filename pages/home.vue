@@ -53,26 +53,42 @@
           <button class="button">See Menu</button>
         </div>
         <!--Sidebar Opener-->
-        <div class="container__content__header__sidebar">
-          <div @click='' class="container__content__header__sidebar__bars">
+        <div class="container__content__header__sidebarOpener">
+          <div
+            @click="sideBarToggle()"
+            class="container__content__header__sidebarOpener__bars"
+            :class="{'sidebarActive': sideBarActive}"
+          >
             <div class="first"></div>
             <div class="second"></div>
             <div class="third"></div>
           </div>
         </div>
-        <!--Sidebar
-        <div class="container__content__header__sidebarToggle" :class="{ 'sidebar-active': sideBarActive }">
-          <nav class="container__content__header__sidebarToggle__sidebar__nav">
-            <ul>
-              <li><nuxt-link to="#">Home</nuxt-link></li>
-              <li><nuxt-link to="#AboutUs">About Us</nuxt-link></li>
-              <li><nuxt-link to="#Menu">Menu</nuxt-link></li>
-              <li><nuxt-link to="#ContactUs">Contact Us</nuxt-link></li>
-            </ul>
-          </nav>
-        </div>
-        <!--Overlay
-        <div class="sidebar-overlay" @click="sideBarToggle"></div>-->
+        <transition name="slide">
+          <!--Sidebar-->
+          <div class="container__content__header__sidebar" 
+          v-if="sideBarActive">
+              <div class=" container__content__header__sidebar__content">
+              <nav
+              class="container__content__header__sidebar__content__nav">
+                <ul>
+                  <li><nuxt-link to="#">Home</nuxt-link></li>
+                  <li><nuxt-link to="#AboutUs">About Us</nuxt-link></li>
+                  <li><nuxt-link to="#Menu">Menu</nuxt-link></li>
+                  <li><nuxt-link to="#ContactUs">Contact Us</nuxt-link></li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </transition>
+        <!--Overlay-->
+        <transition name="overlay">
+          <div
+            v-if="sideBarActive"
+            class="container__content__header__sidebarOverlay"
+            @click="sideBarToggle()"
+          ></div>
+        </transition>
       </header>
       <!--Hero Section-->
       <section class="container__content__hero">
@@ -877,9 +893,11 @@
 </template>
 
 <script setup lang="ts">
-/*
 const sideBarActive = ref(false);
-const sideBarToggle = () => (sideBarActive.value = !sideBarActive.value);*/
+const sideBarToggle = () => (
+  (sideBarActive.value = !sideBarActive.value),
+  console.log("toggole : " + sideBarActive.value)
+);
 </script>
 
 <style lang="scss">
@@ -968,7 +986,81 @@ const sideBarToggle = () => (sideBarActive.value = !sideBarActive.value);*/
     }
   }
 }
+.sidebarActive{
+  .first{
+    transform: rotate(45deg) translate(7px, 7px);
+  }
+  .second{
+    opacity: 0;
+  }
+  .third{
 
+    transform: rotate(-45deg) translate(8px, -8px);
+  }
+}
+
+//slide - transition
+.slide-leave-active,
+.slide-leave-to {
+  animation: exit 0.8s ease-in-out;
+  @keyframes exit {
+    0% {
+      width: 50%;
+      opacity: 1;
+    }
+    100% {
+      width: 0%;
+      opacity: 0;
+    }
+  }
+}
+.slide-enter-active,
+.slide-enter-to {
+  animation: enter 0.6s ease-in-out, textEnter 0.6s ease-in-out;
+  @keyframes enter {
+    0% {
+      width: 0%;
+    }
+    100% {
+      width: 50%;
+    }
+  }
+  nav{
+    @keyframes textEnter {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+  }
+}
+//overlay-transition
+.overlay-leave-active,
+.overlay-leave-to {
+  animation: OvelayExit 0.6s ease-in-out;
+  @keyframes OvelayExit {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+}
+.overlay-enter-active,
+.overlay-enter-to {
+  animation: Overlay_enter 0.6s ease-in-out;
+  @keyframes Overlay_enter {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+}
 //Header Style
 .container {
   width: 100%;
@@ -1056,7 +1148,7 @@ const sideBarToggle = () => (sideBarActive.value = !sideBarActive.value);*/
           }
         }
       }
-      &__sidebar {
+      &__sidebarOpener {
         display: none;
         @media screen and (max-width: 768px) {
           display: flex;
@@ -1065,9 +1157,13 @@ const sideBarToggle = () => (sideBarActive.value = !sideBarActive.value);*/
         &__bars {
           cursor: pointer;
           width: 35px;
+          @media screen and (max-width: 768px){
+            z-index: 100;
+          }
           .first,
           .second,
           .third {
+            transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
             background-color: var(--secondary-color);
             width: 100%;
             height: 5px;
@@ -1076,7 +1172,49 @@ const sideBarToggle = () => (sideBarActive.value = !sideBarActive.value);*/
           }
         }
       }
- 
+      &__sidebar {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100dvh;
+        width: 50%;
+        background-color: #ed1d25;
+        z-index: 100;
+        @media screen and (max-width: 768px){
+          display: block;
+        }
+        &__content {
+          &__nav {
+            padding: 20px;
+            ul {
+              list-style: none;
+              padding: 0;
+              margin: 0;
+              li {
+                margin-bottom: 10px;
+                a {
+                  color: #fff;
+                  text-decoration: none;
+                }
+              }
+            }
+          }
+        }
+      }
+      &__sidebarOverlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100dvh;
+        width: 100dvw;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 02;
+        @media screen and (max-width: 768px){
+          display: block;
+        }
+      }
     }
     &__hero {
       display: flex;
