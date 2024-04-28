@@ -66,7 +66,9 @@
                   />
                 </div>
                 <div class="col px-0 ps-3 snp-date-time">
-                  <label for="time" class="form-label active">{{ $t("Time") }}</label>
+                  <label for="time" class="form-label active">{{
+                    $t("Time")
+                  }}</label>
                   <select
                     id="time"
                     @change="updateForm()"
@@ -504,9 +506,6 @@ export default defineNuxtComponent({
             "Sushi N Poke: Le meilleur restaurant de la ville pour une cuisine délicieuse.",
         },
       ],
-      links: [
-        { rel: "icon", type: "image/x-icon", href: "~/assets/favicon.ico" },
-      ],
     };
   },
   data() {
@@ -516,6 +515,7 @@ export default defineNuxtComponent({
       cardError: false,
       client_secret: "",
       customer_id: "",
+      loading: false,
       form: {
         name: "",
         email: "",
@@ -545,52 +545,54 @@ export default defineNuxtComponent({
     // scroll to top
     window.scrollTo(0, 0);
 
-    document.querySelectorAll("input").forEach((input) => {
-      input.addEventListener("focus", (e) => {
-        /* eslint-disable-next-line */
-        // @ts-ignore
-        e.target.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
+    setTimeout(() => {
+      document.querySelectorAll("input").forEach((input) => {
+        input.addEventListener("focus", (e) => {
+          /* eslint-disable-next-line */
+          // @ts-ignore
+          e.target.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        });
+
+        // if has no text add class to previous label
+        input.addEventListener("input", (e) => {
+          /* eslint-disable */
+          // @ts-ignore
+          if (e.target.value) {
+            // @ts-ignore
+            let label = e.target.previousElementSibling as HTMLElement;
+            label.classList.add("active");
+          } else {
+            // @ts-ignore
+            let label = e.target.previousElementSibling;
+            label.classList.remove("active");
+          }
+          /* eslint-enable */
         });
       });
 
-      // if has no text add class to previous label
-      input.addEventListener("input", (e) => {
-        /* eslint-disable */
-        // @ts-ignore
-        if (e.target.value) {
-          // @ts-ignore
-          let label = e.target.previousElementSibling as HTMLElement;
-          label.classList.add("active");
-        } else {
-          // @ts-ignore
-          let label = e.target.previousElementSibling;
-          label.classList.remove("active");
-        }
-        /* eslint-enable */
-      });
-    });
-
-    if (!this.auth.isAuthenticated) {
-      this.auth._showLogin = false;
-    } else {
-      this.form.name =
-        this.auth.user.first_name + " " + this.auth.user.last_name;
-      this.form.email = this.auth.user.email;
-      this.form.phone = this.auth.user.phone;
-
-      if (this.cart.is_pickup) {
-        this.form.street = "-";
-        this.form.apartment = "-";
-        this.isFormValid = true;
+      if (!this.auth.isAuthenticated) {
+        this.auth._showLogin = true;
       } else {
-        this.form.street = this.auth.user?.address?.address || "";
-        this.form.apartment;
-      }
-    }
+        this.form.name =
+          this.auth.user.first_name + " " + this.auth.user.last_name;
+        this.form.email = this.auth.user.email;
+        this.form.phone = this.auth.user.phone;
 
-    this.updateForm();
+        if (this.cart.is_pickup) {
+          this.form.street = "-";
+          this.form.apartment = "-";
+          this.isFormValid = true;
+        } else {
+          this.form.street = this.auth.user?.address?.address || "";
+          this.form.apartment;
+        }
+      }
+
+      this.updateForm();
+    }, 500);
   },
   computed: {
     schema() {
@@ -598,7 +600,7 @@ export default defineNuxtComponent({
         name: "required",
         email: "required|email",
         phone: "required",
-        street: this.cart.is_pickup ? "optional" : "optional",
+        street: this.cart.is_pickup ? "optional" : "required",
         apartment: this.cart.is_pickup ? "optional" : "optional",
         // make note optional
         note: "optional",
@@ -609,7 +611,9 @@ export default defineNuxtComponent({
     },
     location() {
       let loc = this.settings?.settings?.delivery_zones?.find(
-        (l) => l.id == this.activeLocation
+        (l) =>
+          l.id == this.activeLocation ||
+          this.settings?.settings?.delivery_zones[0].id
       );
 
       this.form.city = loc?.city;
@@ -619,7 +623,7 @@ export default defineNuxtComponent({
       return loc;
     },
     allLocations() {
-      return this.settings.settings.delivery_zones;
+      return this.settings?.settings?.delivery_zones;
     },
     allowOrder() {
       if (this.form.payment_method == "card" && !this.token) {
@@ -829,30 +833,43 @@ export default defineNuxtComponent({
         },
       ];
 
-      // Lun-Jeu : 18H - 23H | Ven - Dem : 18H - 00H
-      // if today is Lun-Jeu and time is 18H - 23H, return hours
-      // if today is Ven - Dim and time is 18H - 00H,
+      // Get today's date and day of the week
       let date = new Date(this.form.date.date);
       let day = date.getDay();
 
+      // Define the different time ranges based on day of the week
       if (day >= 1 && day <= 4) {
+        // Monday to Thursday
         hours = hours.filter((h) => {
           let time = parseInt(h.value.split(":")[0]);
-          return time >= 18 && time < 23;
+          return (time >= 11 && time < 14) || (time >= 18 && time < 22);
+        });
+      } else if (day === 5) {
+        // Friday
+        hours = hours.filter((h) => {
+          let time = parseInt(h.value.split(":")[0]);
+          return (time >= 11 && time < 13) || (time >= 18 && time < 22);
+        });
+      } else if (day === 6) {
+        // Saturday
+        hours = hours.filter((h) => {
+          let time = parseInt(h.value.split(":")[0]);
+          return (time >= 11 && time < 14) || (time >= 18 && time < 22);
         });
       } else {
+        // Sunday - from 18h to 22h
         hours = hours.filter((h) => {
           let time = parseInt(h.value.split(":")[0]);
-          return time >= 18 && time < 24;
+          return time >= 18 && time < 22;
         });
       }
-      
+
       return hours;
     },
   },
   methods: {
     isActiveTime(time) {
-      console.log(time)
+      console.log(time);
       let selected_date = new Date(this.form.date.date);
       let current_date = new Date();
 
@@ -887,6 +904,7 @@ export default defineNuxtComponent({
 
       this.cart.updateCart();
     },
+
     getClientSecret() {
       this.loading = true;
       this.cart.updateCart();
@@ -907,6 +925,10 @@ export default defineNuxtComponent({
             street: this.form.street,
             apartment: this.form.apartment,
           },
+          date: {
+            date: this.form.date.date,
+            time: this.form.date.time,
+          },
         },
         items: { ...this.form.items },
         free_items: { ...this.cart.freeItems },
@@ -924,18 +946,22 @@ export default defineNuxtComponent({
       const token = this.cart.getClientSecret(data);
 
       token.then((res) => {
-        this.customer_id = res?.data?.customer;
-        this.client_secret = res?.data?.client_secret;
+        this.customer_id = res.data.customer;
+        this.client_secret = res.data.client_secret;
         this.loading = false;
       });
+
+      this.loading = false;
     },
     placeOrder() {
+      this.loading = true;
       if (!this.auth.isAuthenticated) {
         this.$toast.error(this.$t("You must be logged in to place an order"), {
           position: "bottom-right",
           timeout: 5000,
           icon: true,
         });
+        this.loading = false;
         return;
       }
 
@@ -944,8 +970,6 @@ export default defineNuxtComponent({
         timeout: 5000,
         icon: true,
       });
-
-      this.loading = true;
 
       let user_id = JSON.parse(
         window.localStorage.getItem("__user") || "{}"
@@ -968,8 +992,12 @@ export default defineNuxtComponent({
               city: this.location?.city,
               state: this.location?.state,
               zip: this.location?.zip,
-              street: this.form.street,
-              apartment: this.form.apartment,
+              street: this.form?.street,
+              apartment: this.form?.apartment,
+            },
+            date: {
+              date: this.form.date.date,
+              time: this.form.date.time,
             },
           },
           items: { ...this.form.items },
@@ -981,7 +1009,7 @@ export default defineNuxtComponent({
           discount: parseFloat(this.cart.discount.toString()),
           subtotal: parseFloat(this.cart.subtotal.toString()),
           total: parseFloat(this.cart.total.toString()),
-          transaction_id: this.token?.setupIntent || "",
+          transaction_id: this.token?.setupIntent,
           status: "pending",
         };
 
@@ -997,28 +1025,28 @@ export default defineNuxtComponent({
             this.cart.resetCart();
 
             window.scrollTo(0, 0);
-
             this.loading = false;
             this.$router.push("/success");
           })
           .catch((err) => {
-            console.log(err);
             this.loading = false;
+            console.log(err);
           });
       } else {
+        this.loading = false;
         this.$toast.error(this.$t("Please fill out the form correctly"), {
           position: "bottom-right",
           timeout: 5000,
           icon: true,
         });
-        this.loading = false;
       }
+
+      this.loading = false;
     },
     updateForm() {
       setTimeout(() => {
         this.$refs.form.validate().then((valid) => {
           this.isFormValid = valid.valid;
-          console.log({ valid });
         });
 
         this.cart.updateCart();
@@ -1050,26 +1078,28 @@ export default defineNuxtComponent({
     cart.fetchOffers();
     const activeLocation = ref(0);
 
-    let old_cart = window.localStorage.getItem("_cart");
-    let last_time = new Date(window.localStorage.getItem("_last_time"));
-    let now_time = new Date();
+    setTimeout(() => {
+      let old_cart = window.localStorage.getItem("_cart");
+      let last_time = new Date(window.localStorage.getItem("_last_time"));
+      let now_time = new Date();
 
-    if (old_cart && old_cart.startsWith("[") && old_cart.endsWith("]")) {
-      if (last_time.getDate() == now_time.getDate()) {
-        cart._cart = JSON.parse(old_cart);
+      if (old_cart && old_cart.startsWith("[") && old_cart.endsWith("]")) {
+        if (last_time.getDate() == now_time.getDate()) {
+          cart._cart = JSON.parse(old_cart);
+        }
       }
-    }
 
-    let loc =
-      window.localStorage.getItem("_delivery_zone") ||
-      settings?.settings?.delivery_zones[0]?.id;
-    if (loc) {
-      activeLocation.value = parseInt(loc);
-    } else {
-      activeLocation.value = 0;
-    }
+      let loc =
+        window.localStorage.getItem("_delivery_zone") ||
+        settings?.settings?.delivery_zones[0]?.id;
+      if (loc) {
+        activeLocation.value = parseInt(loc);
+      } else {
+        activeLocation.value = 0;
+      }
 
-    cart.updateCart();
+      cart.updateCart();
+    }, 500);
 
     return {
       cart,
@@ -1240,15 +1270,15 @@ export default defineNuxtComponent({
 .snp-date-time {
   input,
   select {
-    color:white !important;
+    color: white !important;
   }
-  select{
-    box-sizing:border-box;
-    width:100%;
+  select {
+    box-sizing: border-box;
+    width: 100%;
     height: 48px;
-    border-radius:5px;
-    &:focus{
-      outline:1px solid white;
+    border-radius: 5px;
+    &:focus {
+      outline: 1px solid white;
     }
   }
 }

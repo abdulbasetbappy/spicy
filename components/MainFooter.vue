@@ -18,7 +18,7 @@
           Lundi jusqu’à Jeudi: <strong>11h-14h30, 18h-22h30</strong> <br />
           Vendredi <strong>11h-13h30, 18h-22h30</strong> <br />
           Samedi <strong>11h-14h30, 18h-22h30</strong> <br />
-          Fermé le Dimanche
+          Dimanche <strong>18h00-22h00</strong> <br />
         </p>
       </div>
       <div class="col-xl-3 p-footer__location">
