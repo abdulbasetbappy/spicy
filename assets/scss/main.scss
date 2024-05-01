@@ -5,26 +5,20 @@
 @import "../../node_modules/bootstrap/scss/functions";
 
 // 2. Include any default variable overrides here
-$primary: #ea5822;
-$blue: #ea5822;
-$body-bg: hsl(208, 57%, 5%);
 
 :root {
-  --p-small-font: 16px;
-  --p-heading-font: 50px;
-  --p-title-font: 20px;
-  /* color*/
-  --p-background-color: hsl(208, 57%, 5%);
-  --p-primary-color: #ea5822;
-  --p-black-color: #000000;
-  --p-light-white: #fafafa;
-  --p-white-color: #ffffff;
-  --p-black-gray: #16181a;
-
-  @media screen and (max-width: 768px) {
-    --p-small-font: 14px;
-    --p-heading-font: 28px;
-  }
+  --primary-color: #ed1d25;
+  --secondary-color: #ffffff;
+  --solid-dark: #000000;
+  --text-color: #333;
+  --primary-bg: #f5f5f5;
+  --font-paragraph-xl: 24px;
+  --font-paragraph-lg: 20px;
+  --font-paragraph: 18px;
+  --font-paragraph-xs: 16px;
+  --font-heading-width: 900;
+  --button-border-radios: 4px;
+  --font-family: "Lobster", serif;
 }
 
 // 3. Include remainder of required Bootstrap stylesheets
@@ -80,13 +74,10 @@ $body-bg: hsl(208, 57%, 5%);
 @import "../../node_modules/bootstrap/scss/utilities/api";
 // scss-docs-end import-stack
 
-body {
-  font-family: "Quicksand", serif;
-  font-weight: 400;
-  text-decoration: none;
-}
-
-p {
-  font-family: "Quicksand", sans-serif;
-  font-weight: 400;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto Slab", serif;
+  list-style: none;
 }

@@ -2,11 +2,11 @@
 
 <template>
   <div>
-    <MainHeader />
+
  <div>
   <slot />
  </div>
-    <MainFooter />
+
   </div>
 </template>
 
